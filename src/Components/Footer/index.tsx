@@ -13,7 +13,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { NavLink } from "react-router-dom";
-import logo from "../../../public/images/logo.png";
+import logo from "../../assets/images/logo.png";
 const footerData = [
   {
     title: "Quick Links",
