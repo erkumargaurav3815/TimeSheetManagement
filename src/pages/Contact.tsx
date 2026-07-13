@@ -26,6 +26,64 @@ function Contact() {
     });
   };
 
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  const validate = () => {
+    const newErrors = {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    };
+
+    if (!values.firstName.trim()) {
+      newErrors.firstName = "First name is required";
+    } else if (values.firstName.trim().length < 3) {
+      newErrors.firstName = "Minimum 3 characters required";
+    }
+
+    if (!values.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
+    }
+
+    if (!values.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+      newErrors.email = "Enter a valid email";
+    }
+
+    if (!values.password) {
+      newErrors.password = "Password is required";
+    } else if (values.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every((error) => error === "");
+  };
+
+  const handleSubmit = () => {
+    if (validate()) {
+      console.log(values);
+
+      alert("Form submitted successfully!");
+
+      resetForm();
+      setErrors({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+      });
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
       ...values,
@@ -76,6 +134,8 @@ function Contact() {
               value={values.firstName}
               onChange={handleChange}
               variant="outlined"
+              error={!!errors.firstName}
+              helperText={errors.firstName}
             />
 
             <TextField
@@ -83,16 +143,17 @@ function Contact() {
               label="Last Name"
               value={values.lastName}
               onChange={handleChange}
-              variant="outlined"
+              error={!!errors.lastName}
+              helperText={errors.lastName}
             />
-
             <TextField
               name="email"
               label="Email"
               type="email"
               value={values.email}
               onChange={handleChange}
-              variant="outlined"
+              error={!!errors.email}
+              helperText={errors.email}
             />
 
             <TextField
@@ -102,13 +163,15 @@ function Contact() {
               value={values.password}
               onChange={handleChange}
               variant="outlined"
+              error={!!errors.password}
+              helperText={errors.password}
             />
 
             <Button
               sx={{
                 background: "linear-gradient(135deg,#15105c,#2017bd,#52648c)",
               }}
-              onClick={resetForm}
+              onClick={handleSubmit}
               variant="contained">
               Submit
             </Button>
