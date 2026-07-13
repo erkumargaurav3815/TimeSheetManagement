@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import axios from "axios";
 import {
   Button,
   Card,
@@ -36,7 +37,7 @@ interface User {
   company: Company;
 }
 
-const UserData: React.FC = () => {
+function UserData() {
   const [users, setUsers] = useState<User[]>([]);
   const [showTable, setShowTable] = useState<boolean>(false);
   const [dataLoaded, setDataLoaded] = useState<boolean>(false);
@@ -47,13 +48,11 @@ const UserData: React.FC = () => {
     if (dataLoaded) return;
 
     try {
-      const response = await fetch(
+      const response = await axios.get<User[]>(
         "https://jsonplaceholder.typicode.com/users",
       );
 
-      const data: User[] = await response.json();
-
-      setUsers(data);
+      setUsers(response.data);
       setDataLoaded(true);
     } catch (error) {
       console.error(error);
@@ -130,12 +129,12 @@ const UserData: React.FC = () => {
                       <TableCell align="center">{user.website}</TableCell>
 
                       <TableCell align="center">
-                        {user.address.street}, {user.address.suite},{" "}
+                        {user.address.street}, {user.address.suite},
                         {user.address.city}
                       </TableCell>
 
                       <TableCell align="center">
-                        {user.company.name}, {user.company.catchPhrase},{" "}
+                        {user.company.name}, {user.company.catchPhrase},
                         {user.company.bs}
                       </TableCell>
                     </TableRow>
@@ -148,6 +147,6 @@ const UserData: React.FC = () => {
       )}
     </Container>
   );
-};
+}
 
 export default UserData;
