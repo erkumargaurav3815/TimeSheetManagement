@@ -15,6 +15,7 @@ function Contact() {
     lastName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const resetForm = () => {
@@ -23,6 +24,7 @@ function Contact() {
       lastName: "",
       email: "",
       password: "",
+      confirmPassword: "",
     });
   };
 
@@ -31,6 +33,7 @@ function Contact() {
     lastName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const validate = () => {
@@ -39,6 +42,7 @@ function Contact() {
       lastName: "",
       email: "",
       password: "",
+      confirmPassword: "",
     };
 
     if (!values.firstName.trim()) {
@@ -63,6 +67,12 @@ function Contact() {
       newErrors.password = "Password must be at least 6 characters";
     }
 
+    if (!values.confirmPassword) {
+      newErrors.confirmPassword = "Confirm Password is required";
+    } else if (values.confirmPassword != values.password) {
+      newErrors.confirmPassword = "Password and Confirm Password doesn't match";
+    }
+
     setErrors(newErrors);
 
     return Object.values(newErrors).every((error) => error === "");
@@ -80,6 +90,7 @@ function Contact() {
         lastName: "",
         email: "",
         password: "",
+        confirmPassword: "",
       });
     }
   };
@@ -165,6 +176,17 @@ function Contact() {
               variant="outlined"
               error={!!errors.password}
               helperText={errors.password}
+            />
+
+            <TextField
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              value={values.confirmPassword}
+              onChange={handleChange}
+              variant="outlined"
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword}
             />
 
             <Button
