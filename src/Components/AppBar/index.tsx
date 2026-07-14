@@ -33,6 +33,17 @@ const pages = [
   },
 ];
 
+const authPages = [
+  {
+    name: "Login",
+    path: "/login",
+  },
+  {
+    name: "Sign Up",
+    path: "/signUp",
+  },
+];
+
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
@@ -86,7 +97,6 @@ function ResponsiveAppBar() {
           {/* Mobile Menu */}
           <Box
             sx={{
-              //   flexGrow: 1,
               display: {
                 xs: "flex",
                 md: "none",
@@ -131,7 +141,8 @@ function ResponsiveAppBar() {
                   },
                 },
               }}>
-              {pages.map((page, index) => (
+              {/* Main Menu */}
+              {[...pages, ...authPages].map((page, index) => (
                 <MenuItem
                   key={page.name}
                   component={NavLink}
@@ -144,11 +155,13 @@ function ResponsiveAppBar() {
                     display: "flex",
                     gap: 2,
                     transition: ".3s",
+
                     "&:hover": {
                       background: "linear-gradient(135deg,#2017bd,#52648c)",
                       color: "#fff",
                       transform: "translateX(8px)",
                     },
+
                     "&.active": {
                       background: "linear-gradient(135deg,#2017bd,#52648c)",
                       color: "#fff",
@@ -168,6 +181,7 @@ function ResponsiveAppBar() {
                     }}>
                     {index + 1}
                   </Box>
+
                   <Typography
                     sx={{
                       fontFamily: "Poppins",
@@ -238,6 +252,46 @@ function ResponsiveAppBar() {
                     background: "linear-gradient(135deg,#fff,#eee)",
                     color: "#2017bd",
                     boxShadow: "0 10px 25px rgba(0,0,0,.25)",
+                  },
+                }}>
+                {page.name}
+              </Button>
+            ))}
+          </Box>
+
+          {/* login and signup button */}
+          <Box
+            sx={{
+              display: {
+                xs: "none",
+                md: "flex",
+              },
+              marginLeft: "auto",
+              gap: 1.5,
+            }}>
+            {authPages.map((page) => (
+              <Button
+                key={page.name}
+                component={NavLink}
+                to={page.path}
+                sx={{
+                  px: 3,
+                  py: 1.1,
+                  color: "#fff",
+                  fontFamily: "Poppins",
+                  fontWeight: 600,
+                  textTransform: "none",
+                  borderRadius: "30px",
+                  border: "1px solid rgba(255,255,255,.3)",
+                  transition: ".3s",
+                  "&:hover": {
+                    background: "#fff",
+                    color: "#2017bd",
+                    transform: "translateY(-3px)",
+                  },
+                  "&.active": {
+                    background: "#fff",
+                    color: "#2017bd",
                   },
                 }}>
                 {page.name}
