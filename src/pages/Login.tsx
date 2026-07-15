@@ -124,6 +124,14 @@ const Login = () => {
           boxShadow: 5,
         }}>
         <CardContent>
+          {message && (
+            <Typography
+              color={message === "Login successful" ? "success" : "warning"}
+              align="center"
+              sx={{ mb: 2 }}>
+              {message}
+            </Typography>
+          )}
           <Typography
             variant="h4"
             align="center"
