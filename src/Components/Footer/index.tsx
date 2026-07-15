@@ -14,6 +14,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
+
 const footerData = [
   {
     title: "Quick Links",
@@ -53,6 +54,13 @@ const socialIcons = [
 ];
 
 function Footer() {
+  const isLoggedIn = !!localStorage.getItem("user");
+  const handleProtection = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      alert("Please Log In!");
+    }
+  };
   return (
     <Box
       component="footer"
@@ -165,6 +173,7 @@ function Footer() {
 
               {section.links.map((item) => (
                 <NavLink
+                  onClick={handleProtection}
                   key={item.name}
                   to={item.path}
                   style={{
