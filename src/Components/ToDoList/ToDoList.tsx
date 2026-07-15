@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   Button,
-  Box,
   TextField,
   Table,
   TableBody,
@@ -10,10 +9,11 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
   Chip,
 } from "@mui/material";
 
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 interface Task {
   id: number;
   title: string;
@@ -79,11 +79,11 @@ function ToDoList() {
         margin: "40px auto",
         padding: 3,
       }}>
-      <Typography variant="h4" textAlign="center" mb={3}>
+      <Typography sx={{ textAlign: "center", mb: 3 }} variant="h4">
         Todo List
       </Typography>
 
-      <Box display="flex" gap={2} mb={3}>
+      <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
         <TextField
           type="text"
           fullWidth
@@ -97,7 +97,7 @@ function ToDoList() {
           }}
         />
 
-        <Button variant="contained" onClick={handleSubmit} sx={{ my: 2 }}>
+        <Button variant="contained" onClick={handleSubmit} sx={{ px: 2 }}>
           {editId !== null ? "Update" : "Add"}
         </Button>
       </Box>
