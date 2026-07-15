@@ -25,28 +25,33 @@ function ToDoList() {
   const [input, setInput] = useState("");
   const [editId, setEditId] = useState<number | null>(null);
 
-  // Add / Update task
   const handleSubmit = () => {
     if (!input.trim()) return;
+    console.log("ready to go");
 
     if (editId !== null) {
-      setTasks((prev) =>
-        prev.map((task) =>
-          task.id === editId ? { ...task, title: input } : task,
-        ),
+      //take all current task
+      setTasks(
+        //now store current state (tasks)
+        (prev) =>
+          //check every task
+          prev.map((task) =>
+            // if t-id != e-id give task else edit i/p
+            task.id === editId ? { ...task, title: input } : task,
+          ),
+        //after edit part is done exit from edit mode
       );
       setEditId(null);
     } else {
       setTasks((prev) => [
         ...prev,
         {
-          id: Date.now(),
+          id: tasks.length + 1,
           title: input,
           completed: false,
         },
       ]);
     }
-
     setInput("");
   };
 
@@ -86,7 +91,6 @@ function ToDoList() {
           value={input}
           onChange={(e) => {
             const value = e.target.value;
-
             if (/^[A-Za-z\s]*$/.test(value)) {
               setInput(value);
             }
@@ -131,28 +135,19 @@ function ToDoList() {
               tasks.map((task, index) => (
                 <TableRow key={task.id}>
                   <TableCell>{index + 1}</TableCell>
-
-                  <TableCell
-                    sx={{
-                      textDecoration: task.completed ? "line-through" : "none",
-                    }}>
-                    {task.title}
-                  </TableCell>
-
+                  <TableCell>{task.title}</TableCell>
                   <TableCell>
                     <Chip
                       label={task.completed ? "Completed" : "Pending"}
                       color={task.completed ? "success" : "warning"}
                     />
                   </TableCell>
-
                   <TableCell>
-                    <Box display="flex" gap={1}>
+                    <Box sx={{ p: 2, display: "flex", gap: 1 }}>
                       <Button
                         size="small"
                         variant="contained"
                         color="success"
-                        disabled={task.completed}
                         onClick={() => markCompleted(task.id)}>
                         {task.completed ? "Done" : "Mark Completed"}
                       </Button>
