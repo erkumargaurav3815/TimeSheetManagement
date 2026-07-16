@@ -44,7 +44,7 @@ const courses: Course[] = [
       "Learn digital marketing, branding, SEO, and customer engagement.",
   },
   {
-    title: "MERN Stack",
+    title: "Full Stack Development",
     image: FullStack,
     description:
       "Learn frontend, backend, databases, APIs, and modern web development technologies.",
