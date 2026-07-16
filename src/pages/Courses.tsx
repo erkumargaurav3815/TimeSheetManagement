@@ -44,25 +44,25 @@ const courses: Course[] = [
       "Learn digital marketing, branding, SEO, and customer engagement.",
   },
   {
-    title: "Full Stack",
+    title: "MERN Stack",
     image: FullStack,
     description:
       "Learn frontend, backend, databases, APIs, and modern web development technologies.",
   },
   {
-    title: "UI/UX",
+    title: "UI/UX Design",
     image: UIUX,
     description:
       "Learn user research, wireframes, prototypes, and modern design principles.",
   },
   {
-    title: "Business",
+    title: "Business Management",
     image: Business,
     description:
       "Understand business strategy, management, and growth techniques.",
   },
   {
-    title: "Marketing",
+    title: "Marketing Skills",
     image: Marketing,
     description:
       "Learn digital marketing, branding, SEO, and customer engagement.",
