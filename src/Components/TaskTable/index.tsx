@@ -1,4 +1,3 @@
-//table containing all tasks
 import {
   Table,
   TableBody,
@@ -10,71 +9,92 @@ import {
   Chip,
   IconButton,
 } from "@mui/material";
+
 import Typography from "@mui/material/Typography";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+
 import Box from "@mui/material/Box";
-function TaskTable() {
+
+import EditIcon from "@mui/icons-material/Edit";
+
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
+import type { Task } from "../types";
+interface Props {
+  tasks: Task[];
+
+  completeTask: (id: number) => void;
+
+  handleEdit: (task: Task) => void;
+  deleteTask: (id: number) => void;
+  handleView: (task: Task) => void;
+}
+
+function TaskTable({
+  tasks,
+  completeTask,
+  handleEdit,
+  deleteTask,
+  handleView,
+}: Props) {
   return (
-    <>
-      <TableContainer
-        component={Paper}
-        sx={{
-          borderRadius: 3,
-        }}>
-        <Table>
-          <TableHead>
-            <TableRow
-              sx={{
-                background: "linear-gradient(135deg,#15105c,#2017bd,#52648c)",
-                "& th": {
-                  color: "#fff",
-                  fontWeight: 700,
-                  fontSize: 15,
-                },
-              }}>
-              <TableCell>ID</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Task</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Time Taken</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell align="center">Actions</TableCell>
-            </TableRow>
-          </TableHead>
+    <TableContainer
+      component={Paper}
+      sx={{
+        borderRadius: 3,
+      }}>
+      <Table>
+        <TableHead>
+          <TableRow
+            sx={{
+              background: "linear-gradient(135deg,#15105c,#2017bd,#52648c)",
 
-          <TableBody>
-            <TableRow
-              hover
-              sx={{
-                "&:hover": {
-                  bgcolor: "grey.100",
-                },
-              }}>
-              <TableCell>ID</TableCell>
+              "& th": {
+                color: "#fff",
+                fontWeight: 700,
+              },
+            }}>
+            <TableCell>ID</TableCell>
+            <TableCell>Date</TableCell>
+            <TableCell>Category</TableCell>
 
-              <TableCell>Date</TableCell>
+            <TableCell>Task</TableCell>
 
-              <TableCell sx={{ fontWeight: 600 }}>Task</TableCell>
+            <TableCell>Description</TableCell>
 
-              <TableCell sx={{ maxWidth: 280 }}>
-                <Typography variant="body2" noWrap>
-                  Description
-                </Typography>
+            <TableCell>Time Taken</TableCell>
+
+            <TableCell>Status</TableCell>
+
+            <TableCell align="center">Actions</TableCell>
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
+          {tasks.map((task) => (
+            <TableRow key={task.id} hover>
+              <TableCell>{task.id}</TableCell>
+
+              <TableCell>{task.date}</TableCell>
+              <TableCell>
+                {task.category === "assignment" ? "Assignment" : "Learning"}
+              </TableCell>
+              <TableCell>{task.name}</TableCell>
+
+              <TableCell>
+                <Typography>{task.description}</Typography>
               </TableCell>
 
-              <TableCell>Time Taken</TableCell>
+              <TableCell>{task.timeTaken}</TableCell>
 
               <TableCell>
                 <Chip
-                  // label={task.completed ? "Completed" : "Pending"}
-                  // color={task.completed ? "success" : "warning"}
-                  variant="filled"
-                  size="small"
+                  label={task.status}
+                  color={task.status === "Completed" ? "success" : "warning"}
                 />
-                Status
               </TableCell>
 
               <TableCell align="center">
@@ -82,29 +102,32 @@ function TaskTable() {
                   sx={{
                     display: "flex",
                     justifyContent: "center",
-                    gap: 1,
                   }}>
-                  <IconButton color="success">
+                  <IconButton
+                    color="success"
+                    onClick={() => completeTask(task.id)}
+                    disabled={task.status === "Completed"}>
                     <CheckCircleIcon />
                   </IconButton>
 
-                  <IconButton color="primary">
+                  <IconButton color="primary" onClick={() => handleEdit(task)}>
                     <EditIcon />
                   </IconButton>
 
-                  <IconButton color="error">
+                  <IconButton color="error" onClick={() => deleteTask(task.id)}>
                     <DeleteIcon />
                   </IconButton>
-                  <IconButton>
-                    <VisibilityIcon color="info" />
+
+                  <IconButton color="info" onClick={() => handleView(task)}>
+                    <VisibilityIcon />
                   </IconButton>
                 </Box>
               </TableCell>
             </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
 
