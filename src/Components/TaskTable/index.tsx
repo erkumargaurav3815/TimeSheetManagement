@@ -68,16 +68,31 @@ function TaskTable({
         <TableBody>
           {tasks.map((task) => (
             <TableRow key={task.id} hover>
-              <TableCell>{task.id}</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>{task.id}</TableCell>
 
-              <TableCell>{task.date}</TableCell>
+              <TableCell sx={{ whiteSpace: "nowrap" }}>{task.date}</TableCell>
               <TableCell>
                 {task.category === "assignment" ? "Assignment" : "Learning"}
               </TableCell>
-              <TableCell>{task.name}</TableCell>
+              <TableCell
+                sx={{
+                  maxWidth: 100,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}>
+                {task.name}
+              </TableCell>
 
               <TableCell>
-                <Typography>{task.description}</Typography>
+                <Typography
+                  sx={{
+                    maxWidth: 140,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}>
+                  {task.description}
+                </Typography>
               </TableCell>
 
               <TableCell>{task.timeTaken}</TableCell>
