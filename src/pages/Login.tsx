@@ -10,22 +10,8 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-interface User {
-  email: string;
-  password: string;
-  name: string;
-}
-
 const Login = () => {
   const navigate = useNavigate();
-
-  const users: User[] = [
-    {
-      email: "admin@gmail.com",
-      password: "123456",
-      name: "Admin",
-    },
-  ];
 
   //later on setMessage should update to login message
   const [message, setMessage] = useState("");
@@ -85,28 +71,24 @@ const Login = () => {
 
   const handleLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!validate()) return;
 
-    const user = users.find(
-      (item) =>
-        item.email === values.email && item.password === values.password,
-    );
-
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-      setMessage("Login successful");
-
+    const getCredentials = localStorage.getItem("user");
+    if (!getCredentials) {
+      setMessage("No User Found!");
+      return;
+    }
+    const user = JSON.parse(getCredentials);
+    if (user.email === values.email && user.password === values.password) {
+      setMessage("Login Sucessfull");
       resetForm();
-
       setTimeout(() => {
         navigate("/home");
-      }, 500);
+      }, 2000);
     } else {
-      setMessage("Invalid email or password");
+      setMessage("Invalid Credentials");
     }
   };
-
   return (
     <Box
       sx={{
@@ -142,6 +124,14 @@ const Login = () => {
             }}>
             Login
           </Typography>
+          {message && (
+            <Typography
+              color={message === "Login Sucessfull" ? "success" : "error"}
+              align="center"
+              sx={{ mb: 2 }}>
+              {message}
+            </Typography>
+          )}
 
           <form onSubmit={handleLogin}>
             <TextField
