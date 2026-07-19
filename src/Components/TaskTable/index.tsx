@@ -1,3 +1,4 @@
+//code for displaying tasks in the table
 import {
   Table,
   TableBody,
@@ -9,25 +10,16 @@ import {
   Chip,
   IconButton,
 } from "@mui/material";
-
 import Typography from "@mui/material/Typography";
-
 import Box from "@mui/material/Box";
-
 import EditIcon from "@mui/icons-material/Edit";
-
 import DeleteIcon from "@mui/icons-material/Delete";
-
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-
 import VisibilityIcon from "@mui/icons-material/Visibility";
-
 import type { Task } from "../types";
 interface Props {
   tasks: Task[];
-
   completeTask: (id: number) => void;
-
   handleEdit: (task: Task) => void;
   deleteTask: (id: number) => void;
   handleView: (task: Task) => void;

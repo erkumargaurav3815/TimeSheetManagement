@@ -1,3 +1,4 @@
+//code for storing data
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -5,13 +6,21 @@ import FormModal from "../Components/FormModal";
 import TaskTable from "../Components/TaskTable";
 import type { Task } from "../Components/types";
 import { Modal, Button } from "@mui/material";
+
 function TimeSheet() {
+  const [editTask, setEditTask] = useState<Task | null>(null);
+  const [viewTask, setViewTask] = useState<Task | null>(null);
+
+  //get all tasks from localStorage
   const [tasks, setTasks] = useState<Task[]>(() => {
     const savedTasks = localStorage.getItem("tasks");
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
-  const [editTask, setEditTask] = useState<Task | null>(null);
-  const [viewTask, setViewTask] = useState<Task | null>(null);
+  //store tasks in localStorage (run the code whenever tasks changes)
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
   // add tasks
   const addTask = (task: Task) => {
     setTasks((prev) => [
@@ -37,10 +46,10 @@ function TimeSheet() {
     setTasks((prev) =>
       prev.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
     );
-
+    //after editing remove the selected task
     setEditTask(null);
   };
-
+  //select the task to be edited
   const handleEdit = (task: Task) => {
     setEditTask(task);
   };
@@ -49,7 +58,6 @@ function TimeSheet() {
   const deleteTask = (id: number) => {
     setTasks((prev) => {
       const updatedTasks = prev.filter((task) => task.id !== id);
-
       return updatedTasks.map((task, index) => ({
         ...task,
         id: index + 1,
@@ -65,10 +73,6 @@ function TimeSheet() {
     setViewTask(null);
   };
 
-  //keep tasks in localStorage
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
   return (
     <Box
       sx={{
