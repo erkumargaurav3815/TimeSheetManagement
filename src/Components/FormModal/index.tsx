@@ -37,7 +37,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
     // Add 0 before single digit values
     const hour = String(currentHour).padStart(2, "0");
     const minute = String(currentMinute).padStart(2, "0");
-    console.log("current time: ", hour, minute);
+    // console.log("current time: ", hour, minute);
     return `${hour}:${minute}`;
   }
 
@@ -47,7 +47,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
     currentDate.setHours(currentDate.getHours() + 1);
     const hour = String(currentDate.getHours()).padStart(2, "0");
     const minute = String(currentDate.getMinutes()).padStart(2, "0");
-    console.log("one hour later: ", hour, minute);
+    // console.log("one hour later: ", hour, minute);
     return `${hour}:${minute}`;
   }
 
@@ -68,11 +68,15 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
     // Convert minutes into hours and minutes
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
+    // console.log(hours, minutes);
     return `${hours}h ${minutes}m`;
-    console.log(hours, minutes);
   }
   const [startTime, setStartTime] = useState(getCurrentTime());
   const [endTime, setEndTime] = useState(getNextHourTime());
+
+  const capitalizeFirstLetter = (value: string) => {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  };
 
   useEffect(() => {
     if (editTask) {
@@ -312,11 +316,11 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
                 const task: Task = {
                   id: editTask ? editTask.id : 0,
 
-                  category: project,
+                  category: capitalizeFirstLetter(project),
 
-                  name: taskName,
+                  name: capitalizeFirstLetter(taskName),
 
-                  description,
+                  description: capitalizeFirstLetter(description),
 
                   date,
 

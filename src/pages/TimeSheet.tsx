@@ -4,35 +4,42 @@ import Typography from "@mui/material/Typography";
 import FormModal from "../Components/FormModal";
 import TaskTable from "../Components/TaskTable";
 import type { Task } from "../Components/types";
-import { Modal, Button } from "@mui/material";
+import {
+  Modal,
+  Button,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 function TimeSheet() {
   const [editTask, setEditTask] = useState<Task | null>(null);
   const [viewTask, setViewTask] = useState<Task[]>([]);
 
-  // get all tasks from localStorage
+  // get tasks from localStorage
   const [tasks, setTasks] = useState<Task[]>(() => {
     const savedTasks = localStorage.getItem("tasks");
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
 
-  // store tasks in localStorage
+  // save tasks
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  // add tasks
+  // add task
   const addTask = (task: Task) => {
     setTasks((prev) => [
       ...prev,
       {
         ...task,
-        id: prev.length + 1,
+        id: Date.now(),
       },
     ]);
   };
 
-  // update status
+  // complete task
   const completeTask = (id: number) => {
     setTasks((prev) =>
       prev.map((task) =>
@@ -50,24 +57,17 @@ function TimeSheet() {
     setEditTask(null);
   };
 
-  // select task for edit
+  // edit
   const handleEdit = (task: Task) => {
     setEditTask(task);
   };
 
-  // delete task
+  // delete
   const deleteTask = (id: number) => {
-    setTasks((prev) => {
-      const updatedTasks = prev.filter((task) => task.id !== id);
-
-      return updatedTasks.map((task, index) => ({
-        ...task,
-        id: index + 1,
-      }));
-    });
+    setTasks((prev) => prev.filter((task) => task.id !== id));
   };
 
-  // view all tasks of same date
+  // view tasks of same date
   const handleView = (task: Task) => {
     const sameDateTasks = tasks.filter((item) => item.date === task.date);
 
@@ -78,16 +78,24 @@ function TimeSheet() {
     setViewTask([]);
   };
 
-  // show only first task of each date in table
-  const groupedTasks = tasks.filter(
-    (task, index, array) =>
-      index === array.findIndex((item) => item.date === task.date),
-  );
+  // group tasks by date for viewing
+  const groupedTasks: Record<string, Task[]> = {};
+
+  for (const task of tasks) {
+    if (!groupedTasks[task.date]) {
+      groupedTasks[task.date] = [];
+    }
+
+    groupedTasks[task.date].push(task);
+  }
+
+  // only first task of each date for table
+  const tableTasks = Object.values(groupedTasks).map((taskList) => taskList[0]);
 
   return (
     <Box
       sx={{
-        maxWidth: 900,
+        maxWidth: 1200,
         margin: "40px auto",
         padding: 3,
       }}>
@@ -116,7 +124,7 @@ function TimeSheet() {
         </Typography>
       ) : (
         <TaskTable
-          tasks={groupedTasks}
+          tasks={tableTasks}
           completeTask={completeTask}
           handleEdit={handleEdit}
           deleteTask={deleteTask}
@@ -125,7 +133,7 @@ function TimeSheet() {
       )}
 
       {viewTask.length > 0 && (
-        <Modal open={Boolean(viewTask.length)} onClose={closeView}>
+        <Modal open={true} onClose={closeView}>
           <Box
             sx={{
               position: "absolute",
@@ -135,12 +143,12 @@ function TimeSheet() {
 
               width: {
                 xs: "90%",
-                sm: 450,
+                sm: 500,
               },
 
               bgcolor: "white",
-              borderRadius: 4,
-              p: 4,
+              borderRadius: 3,
+              p: 3,
               boxShadow: 24,
 
               maxHeight: "90vh",
@@ -152,52 +160,45 @@ function TimeSheet() {
                 fontWeight: 800,
                 mb: 3,
               }}>
-              Tasks Details
+              Tasks on {viewTask[0].date}
             </Typography>
 
             {viewTask.map((task) => (
-              <Box
+              <Accordion
                 key={task.id}
                 sx={{
-                  mb: 3,
-                  p: 2,
+                  mb: 1,
                   borderRadius: 2,
-                  backgroundColor: "#f5f5f5",
                 }}>
-                <Typography sx={{ mb: 1 }}>
-                  <b>ID:</b> {task.id}
-                </Typography>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography sx={{ fontWeight: 700 }}>{task.name}</Typography>
+                </AccordionSummary>
 
-                <Typography sx={{ mb: 1 }}>
-                  <b>Date:</b> {task.date}
-                </Typography>
+                <AccordionDetails>
+                  <Typography>
+                    <b>Category:</b> {task.category}
+                  </Typography>
 
-                <Typography sx={{ mb: 1 }}>
-                  <b>Category:</b> {task.category}
-                </Typography>
+                  <Typography>
+                    <b>Description:</b> {task.description}
+                  </Typography>
 
-                <Typography sx={{ mb: 1 }}>
-                  <b>Task:</b> {task.name}
-                </Typography>
+                  <Typography>
+                    <b>Time Taken:</b> {task.timeTaken}
+                  </Typography>
 
-                <Typography sx={{ mb: 1 }}>
-                  <b>Description:</b> {task.description}
-                </Typography>
-
-                <Typography sx={{ mb: 1 }}>
-                  <b>Total Time:</b> {task.timeTaken}
-                </Typography>
-
-                <Typography>
-                  <b>Status:</b> {task.status}
-                </Typography>
-              </Box>
+                  <Typography>
+                    <b>Status:</b> {task.status}
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
             ))}
 
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
+                mt: 2,
               }}>
               <Button variant="contained" onClick={closeView}>
                 Close

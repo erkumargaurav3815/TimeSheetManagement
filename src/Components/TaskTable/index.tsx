@@ -43,13 +43,12 @@ function TaskTable({
           <TableRow
             sx={{
               background: "linear-gradient(135deg,#15105c,#2017bd,#52648c)",
-
               "& th": {
                 color: "#fff",
                 fontWeight: 700,
               },
             }}>
-            <TableCell>ID</TableCell>
+            <TableCell>S.No.</TableCell>
             <TableCell>Date</TableCell>
             <TableCell>Category</TableCell>
 
@@ -66,9 +65,9 @@ function TaskTable({
         </TableHead>
 
         <TableBody>
-          {tasks.map((task) => (
+          {tasks.map((task, index) => (
             <TableRow key={task.id} hover>
-              <TableCell sx={{ fontWeight: "bold" }}>{task.id}</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>{index + 1}</TableCell>
 
               <TableCell sx={{ whiteSpace: "nowrap" }}>{task.date}</TableCell>
               <TableCell>
@@ -90,6 +89,7 @@ function TaskTable({
                     maxWidth: 140,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
                   }}>
                   {task.description}
                 </Typography>
