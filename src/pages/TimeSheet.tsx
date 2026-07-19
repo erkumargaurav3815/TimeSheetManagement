@@ -1,4 +1,3 @@
-//code for storing data
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -9,14 +8,15 @@ import { Modal, Button } from "@mui/material";
 
 function TimeSheet() {
   const [editTask, setEditTask] = useState<Task | null>(null);
-  const [viewTask, setViewTask] = useState<Task | null>(null);
+  const [viewTask, setViewTask] = useState<Task[]>([]);
 
-  //get all tasks from localStorage
+  // get all tasks from localStorage
   const [tasks, setTasks] = useState<Task[]>(() => {
     const savedTasks = localStorage.getItem("tasks");
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
-  //store tasks in localStorage (run the code whenever tasks changes)
+
+  // store tasks in localStorage
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
@@ -32,7 +32,7 @@ function TimeSheet() {
     ]);
   };
 
-  //update status of tasks
+  // update status
   const completeTask = (id: number) => {
     setTasks((prev) =>
       prev.map((task) =>
@@ -41,23 +41,25 @@ function TimeSheet() {
     );
   };
 
-  //edit tasks
+  // update task
   const updateTask = (updatedTask: Task) => {
     setTasks((prev) =>
       prev.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
     );
-    //after editing remove the selected task
+
     setEditTask(null);
   };
-  //select the task to be edited
+
+  // select task for edit
   const handleEdit = (task: Task) => {
     setEditTask(task);
   };
 
-  //delete  tasks
+  // delete task
   const deleteTask = (id: number) => {
     setTasks((prev) => {
       const updatedTasks = prev.filter((task) => task.id !== id);
+
       return updatedTasks.map((task, index) => ({
         ...task,
         id: index + 1,
@@ -65,13 +67,22 @@ function TimeSheet() {
     });
   };
 
-  //view tasks
+  // view all tasks of same date
   const handleView = (task: Task) => {
-    setViewTask(task);
+    const sameDateTasks = tasks.filter((item) => item.date === task.date);
+
+    setViewTask(sameDateTasks);
   };
+
   const closeView = () => {
-    setViewTask(null);
+    setViewTask([]);
   };
+
+  // show only first task of each date in table
+  const groupedTasks = tasks.filter(
+    (task, index, array) =>
+      index === array.findIndex((item) => item.date === task.date),
+  );
 
   return (
     <Box
@@ -105,15 +116,16 @@ function TimeSheet() {
         </Typography>
       ) : (
         <TaskTable
-          tasks={tasks}
+          tasks={groupedTasks}
           completeTask={completeTask}
           handleEdit={handleEdit}
           deleteTask={deleteTask}
           handleView={handleView}
         />
       )}
-      {viewTask && (
-        <Modal open={Boolean(viewTask)} onClose={closeView}>
+
+      {viewTask.length > 0 && (
+        <Modal open={Boolean(viewTask.length)} onClose={closeView}>
           <Box
             sx={{
               position: "absolute",
@@ -130,6 +142,9 @@ function TimeSheet() {
               borderRadius: 4,
               p: 4,
               boxShadow: 24,
+
+              maxHeight: "90vh",
+              overflowY: "auto",
             }}>
             <Typography
               variant="h5"
@@ -137,36 +152,47 @@ function TimeSheet() {
                 fontWeight: 800,
                 mb: 3,
               }}>
-              Task Details
+              Tasks Details
             </Typography>
 
-            <Typography sx={{ mb: 1 }}>
-              <b>ID:</b> {viewTask.id}
-            </Typography>
+            {viewTask.map((task) => (
+              <Box
+                key={task.id}
+                sx={{
+                  mb: 3,
+                  p: 2,
+                  borderRadius: 2,
+                  backgroundColor: "#f5f5f5",
+                }}>
+                <Typography sx={{ mb: 1 }}>
+                  <b>ID:</b> {task.id}
+                </Typography>
 
-            <Typography sx={{ mb: 1 }}>
-              <b>Date:</b> {viewTask.date}
-            </Typography>
+                <Typography sx={{ mb: 1 }}>
+                  <b>Date:</b> {task.date}
+                </Typography>
 
-            <Typography sx={{ mb: 1 }}>
-              <b>Category:</b> {viewTask.category}
-            </Typography>
+                <Typography sx={{ mb: 1 }}>
+                  <b>Category:</b> {task.category}
+                </Typography>
 
-            <Typography sx={{ mb: 1 }}>
-              <b>Task:</b> {viewTask.name}
-            </Typography>
+                <Typography sx={{ mb: 1 }}>
+                  <b>Task:</b> {task.name}
+                </Typography>
 
-            <Typography sx={{ mb: 1 }}>
-              <b>Description:</b> {viewTask.description}
-            </Typography>
+                <Typography sx={{ mb: 1 }}>
+                  <b>Description:</b> {task.description}
+                </Typography>
 
-            <Typography sx={{ mb: 1 }}>
-              <b>Total Time:</b> {viewTask.timeTaken}
-            </Typography>
+                <Typography sx={{ mb: 1 }}>
+                  <b>Total Time:</b> {task.timeTaken}
+                </Typography>
 
-            <Typography sx={{ mb: 2 }}>
-              <b>Status:</b> {viewTask.status}
-            </Typography>
+                <Typography>
+                  <b>Status:</b> {task.status}
+                </Typography>
+              </Box>
+            ))}
 
             <Box
               sx={{
