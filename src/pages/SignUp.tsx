@@ -7,6 +7,7 @@ import {
   Button,
   Typography,
   Box,
+  Link,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -110,6 +111,12 @@ const SignUp = () => {
           boxShadow: 5,
         }}>
         <CardContent>
+          {message && (
+            <Typography color="success" align="center" sx={{ mb: 2 }}>
+              {message}
+            </Typography>
+          )}
+
           <Typography
             variant="h4"
             align="center"
@@ -120,12 +127,12 @@ const SignUp = () => {
             }}>
             Sign Up
           </Typography>
-
+          {/* 
           {message && (
             <Typography color="success" align="center" sx={{ mb: 2 }}>
               {message}
             </Typography>
-          )}
+          )} */}
 
           <form onSubmit={handleSignUp}>
             <TextField
@@ -151,6 +158,13 @@ const SignUp = () => {
               error={!!errors.password}
               helperText={errors.password}
             />
+
+            <Typography>
+              Already have an account?{" "}
+              <Link href="/login" sx={{ textDecoration: "none" }}>
+                Login
+              </Link>
+            </Typography>
 
             <Button
               fullWidth
