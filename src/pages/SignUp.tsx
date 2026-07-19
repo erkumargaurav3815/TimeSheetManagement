@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import { useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import {
@@ -11,15 +10,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Link from "@mui/material/Link";
-=======
-// import React from 'react'
->>>>>>> Stashed changes
 
-function SignUp() {
-  return <h1>SignUp</h1>;
-}
-
-<<<<<<< Updated upstream
 const SignUp = () => {
   const navigate = useNavigate();
 
@@ -182,6 +173,4 @@ const SignUp = () => {
   );
 };
 
-=======
->>>>>>> Stashed changes
 export default SignUp;
