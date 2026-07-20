@@ -6,9 +6,6 @@ export const filterTasks = (tasks: Task[], search: string) => {
   const query = search.toLowerCase();
 
   return tasks.filter((task) =>
-    [task.name, task.description, task.category, task.date, task.timeTaken]
-      .join(" ")
-      .toLowerCase()
-      .includes(query),
+    [task.name, task.category].join(" ").toLowerCase().includes(query),
   );
 };
