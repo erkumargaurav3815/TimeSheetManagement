@@ -7,5 +7,5 @@ export interface Task {
   startTime: string;
   endTime: string;
   timeTaken: string;
-  status: string;
+  // status: string;
 }

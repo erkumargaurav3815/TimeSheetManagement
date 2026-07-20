@@ -19,7 +19,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import type { Task } from "../types";
 interface Props {
   tasks: Task[];
-  completeTask: (id: number) => void;
+  // completeTask: (id: number) => void;
   handleEdit: (task: Task) => void;
   deleteTask: (id: number) => void;
   handleView: (task: Task) => void;

@@ -27,7 +27,13 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
   const [topic, setTopic] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({
+    project: "",
+    taskName: "",
+    description: "",
+    date: "",
+    time: "",
+  });
 
   //get the current time
   function getCurrentTime() {
@@ -101,6 +107,79 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
   const isAlphabetOnly = (value: string) => {
     return /^[A-Za-z\s]+$/.test(value);
   };
+
+  //form modal validation
+  const validate = () => {
+    const newErrors = {
+      project: "",
+      taskName: "",
+      description: "",
+      date: "",
+      time: "",
+    };
+
+    // if project=assignment then taskName=projectName else taskName=topic
+    const taskName = project === "assignment" ? projectName : topic;
+
+    if (!project) {
+      newErrors.project = "Category is required";
+    }
+
+    if (!taskName.trim()) {
+      newErrors.taskName = "Topic/Project name is required";
+    } else if (taskName.trim().length < 5) {
+      newErrors.taskName = "Minimum 5 characters required";
+    } else if (!isAlphabetOnly(taskName)) {
+      newErrors.taskName = "Only alphabets are allowed";
+    }
+
+    if (!description.trim()) {
+      newErrors.description = "Description is required";
+    } else if (description.trim().length < 20) {
+      newErrors.description = "Minimum 20 characters required";
+    } else if (!isAlphabetOnly(description)) {
+      newErrors.description = "Only alphabets are allowed";
+    }
+
+    if (!date) {
+      newErrors.date = "Date is required";
+    }
+
+    if (!startTime || !endTime) {
+      newErrors.time = "Start Time and End Time are required";
+    }
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every((err) => err === "");
+  };
+
+  const addUpdateButton = () => {
+    if (!validate()) return;
+
+    const taskName = project === "assignment" ? projectName : topic;
+
+    const task: Task = {
+      id: editTask ? editTask.id : 0,
+      category: capitalizeFirstLetter(project),
+      name: capitalizeFirstLetter(taskName),
+      description: capitalizeFirstLetter(description),
+      date,
+      startTime,
+      endTime,
+      timeTaken: calculateDuration(startTime, endTime),
+      // status: editTask ? editTask.status : "Pending",
+    };
+
+    if (editTask) {
+      updateTask(task);
+    } else {
+      addTask(task);
+    }
+
+    handleClose();
+  };
+
   const resetForm = () => {
     setProject("");
     setProjectName("");
@@ -163,16 +242,20 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
             {editTask ? "Edit Task" : "Create New Task"}
           </Typography>
 
-          <FormControl fullWidth sx={{ mb: 2 }}>
+          <FormControl fullWidth sx={{ mb: 2 }} error={!!errors.project}>
             <InputLabel>Category</InputLabel>
 
             <Select value={project} label="Category" onChange={handleChange}>
               <MenuItem value="learning">📚 Learning</MenuItem>
-
               <MenuItem value="assignment">📝 Assignment</MenuItem>
             </Select>
-          </FormControl>
 
+            {errors.project && (
+              <Typography color="error" variant="caption">
+                {errors.project}
+              </Typography>
+            )}
+          </FormControl>
           {project === "assignment" ? (
             <TextField
               fullWidth
@@ -183,6 +266,8 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
                   setProjectName(e.target.value);
                 }
               }}
+              error={!!errors.taskName}
+              helperText={errors.taskName}
               sx={{ mb: 2 }}
             />
           ) : project === "learning" ? (
@@ -195,6 +280,8 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
                   setTopic(e.target.value);
                 }
               }}
+              error={!!errors.taskName}
+              helperText={errors.taskName}
               sx={{ mb: 2 }}
             />
           ) : null}
@@ -210,6 +297,8 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
                 setDescription(e.target.value);
               }
             }}
+            error={!!errors.description}
+            helperText={errors.description}
             sx={{ mb: 2 }}
           />
 
@@ -221,6 +310,12 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
               onChange={(value) => {
                 setDate(value ? value.format("DD-MM-YYYY") : "");
               }}
+              slotProps={{
+                textField: {
+                  error: !!errors.date,
+                  helperText: errors.date,
+                },
+              }}
               sx={{
                 width: "100%",
                 mb: 2,
@@ -228,7 +323,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
             />
           </LocalizationProvider>
 
-          {error && (
+          {/* {error && (
             <Typography
               color="error"
               sx={{
@@ -237,7 +332,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
               }}>
               {error}
             </Typography>
-          )}
+          )} */}
 
           <Box
             sx={{
@@ -250,6 +345,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
               type="time"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
+              error={!!errors.time}
             />
 
             <TextField
@@ -257,6 +353,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
               type="time"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
+              error={!!errors.time}
             />
           </Box>
 
@@ -271,92 +368,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
               Cancel
             </Button>
 
-            <Button
-              variant="contained"
-              onClick={() => {
-                const taskName = project === "assignment" ? projectName : topic;
-
-                if (project.trim().length < 5) {
-                  setError("Project should have a minimum of 5 characters.");
-                  return;
-                }
-
-                if (!project) {
-                  setError("Category is required");
-                  return;
-                }
-
-                if (taskName.trim().length < 5) {
-                  setError("Topic should have a minimum of 5 characters.");
-                  return;
-                }
-
-                if (!taskName.trim()) {
-                  setError("Topic/Project name is required");
-                  return;
-                }
-
-                if (!isAlphabetOnly(taskName)) {
-                  setError("Only alphabets are allowed in Topic/Project name");
-                  return;
-                }
-
-                if (description.trim().length < 20) {
-                  setError(
-                    "Description should have a minimum of 20 characters.",
-                  );
-                  return;
-                }
-                console.log("here");
-                if (!description.trim()) {
-                  setError("Description is required");
-                  return;
-                }
-
-                if (!isAlphabetOnly(description)) {
-                  setError("Only alphabets are allowed in Description");
-                  return;
-                }
-
-                if (!date) {
-                  setError("Date is required");
-                  return;
-                }
-
-                if (!startTime || !endTime) {
-                  setError("Start Time and End Time are required");
-                  return;
-                }
-
-                setError("");
-
-                const task: Task = {
-                  id: editTask ? editTask.id : 0,
-
-                  category: capitalizeFirstLetter(project),
-
-                  name: capitalizeFirstLetter(taskName),
-
-                  description: capitalizeFirstLetter(description),
-
-                  date,
-
-                  startTime,
-
-                  endTime,
-
-                  timeTaken: calculateDuration(startTime, endTime),
-                  status: editTask ? editTask.status : "Pending",
-                };
-
-                if (editTask) {
-                  updateTask(task);
-                } else {
-                  addTask(task);
-                }
-
-                handleClose();
-              }}>
+            <Button variant="contained" onClick={addUpdateButton}>
               {editTask ? "Update Task" : "Add Task"}
             </Button>
           </Box>

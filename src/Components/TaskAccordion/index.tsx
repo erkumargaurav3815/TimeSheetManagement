@@ -4,7 +4,7 @@ import {
   AccordionDetails,
   Typography,
   Box,
-  Chip,
+  // Chip,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import type { Task } from "../types";
@@ -57,10 +57,10 @@ function TaskAccordion({ tasks }: Props) {
                   <b>Time Taken:</b> {task.timeTaken}
                 </Typography>
 
-                <Chip
+                {/* <Chip
                   label={task.status}
                   color={task.status === "Completed" ? "success" : "warning"}
-                />
+                /> */}
               </Box>
             ))}
           </AccordionDetails>

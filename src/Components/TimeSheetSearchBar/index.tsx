@@ -9,7 +9,7 @@ function SearchBar() {
         sx={{ "& > :not(style)": { m: 1, width: "25ch" } }}
         noValidate
         autoComplete="off">
-        <TextField id="filled-basic" label="Filled" variant="filled" />
+        <TextField id="outlined-basic" label="Search " variant="outlined" />
       </Box>
     </>
   );

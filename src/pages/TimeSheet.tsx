@@ -12,7 +12,7 @@ import {
   AccordionDetails,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-// import SearchBar from "../Components/TimeSheetSearchBar";
+import SearchBar from "../Components/TimeSheetSearchBar";
 import DeleteTaskAlert from "../Components/DeleteTaskAlert";
 
 function TimeSheet() {
@@ -43,14 +43,14 @@ function TimeSheet() {
     ]);
   };
 
-  // complete task
-  const completeTask = (id: number) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, status: "Completed" } : task,
-      ),
-    );
-  };
+  // mark task completed
+  // const completeTask = (id: number) => {
+  //   setTasks((prev) =>
+  //     prev.map((task) =>
+  //       task.id === id ? { ...task, status: "Completed" } : task,
+  //     ),
+  //   );
+  // };
 
   // update task
   const updateTask = (updatedTask: Task) => {
@@ -128,11 +128,17 @@ function TimeSheet() {
       <Typography
         sx={{
           textAlign: "center",
-          mb: 3,
+          // m: 3,
         }}
         variant="h4">
         Time Sheet Management
       </Typography>
+
+      {/* Search bar starts */}
+      <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>
+        <SearchBar />
+      </Box>
+      {/* Search bar ends */}
 
       <FormModal
         addTask={addTask}
@@ -151,7 +157,7 @@ function TimeSheet() {
       ) : (
         <TaskTable
           tasks={tableTasks}
-          completeTask={completeTask}
+          // completeTask={completeTask}
           handleEdit={handleEdit}
           deleteTask={deleteTask}
           handleView={handleView}
@@ -213,9 +219,9 @@ function TimeSheet() {
                     <b>Time Taken:</b> {task.timeTaken}
                   </Typography>
 
-                  <Typography>
+                  {/* <Typography>
                     <b>Status:</b> {task.status}
-                  </Typography>
+                  </Typography> */}
                 </AccordionDetails>
               </Accordion>
             ))}
