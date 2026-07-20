@@ -6,6 +6,8 @@ import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import TimeSheet from "../pages/TimeSheet";
 import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
+
 function RoutesComponent() {
   return (
     <Routes>
@@ -42,8 +44,23 @@ function RoutesComponent() {
           </ProtectedRoute>
         }
       />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/signup"
+        element={
+          <PublicRoute>
+            <SignUp />
+          </PublicRoute>
+        }
+      />
     </Routes>
   );
 }
