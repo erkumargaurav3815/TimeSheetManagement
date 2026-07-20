@@ -53,7 +53,6 @@ function TimeSheet() {
     setTasks((prev) =>
       prev.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
     );
-
     setEditTask(null);
   };
 
@@ -70,7 +69,6 @@ function TimeSheet() {
   // view tasks of same date
   const handleView = (task: Task) => {
     const sameDateTasks = tasks.filter((item) => item.date === task.date);
-
     setViewTask(sameDateTasks);
   };
 
@@ -85,12 +83,14 @@ function TimeSheet() {
     if (!groupedTasks[task.date]) {
       groupedTasks[task.date] = [];
     }
-
     groupedTasks[task.date].push(task);
   }
 
   // only first task of each date for table
-  const tableTasks = Object.values(groupedTasks).map((taskList) => taskList[0]);
+  const taskLists = Object.values(groupedTasks);
+  const tableTasks = taskLists.map((taskList) => {
+    return taskList[0];
+  });
 
   return (
     <Box
