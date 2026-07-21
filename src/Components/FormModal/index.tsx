@@ -40,7 +40,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
     const currentDate = new Date();
     const currentHour = currentDate.getHours();
     const currentMinute = currentDate.getMinutes();
-    // Add 0 before single digit values
+    // Add 0 before single digit values (for own convienience hours & minutes should always be of 2 digits)
     const hour = String(currentHour).padStart(2, "0");
     const minute = String(currentMinute).padStart(2, "0");
     // console.log("current time: ", hour, minute);
@@ -151,9 +151,11 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
 
     setErrors(newErrors);
 
+    //get all values from newErrors object and return true if all errors are empty else false
     return Object.values(newErrors).every((err) => err === "");
   };
 
+  //add or update task button function
   const addUpdateButton = () => {
     if (!validate()) return;
 
@@ -189,6 +191,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
     setStartTime(getCurrentTime());
     setEndTime(getNextHourTime());
   };
+
   const handleClose = () => {
     setOpen(false);
     resetForm();
@@ -307,6 +310,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
               label="Date"
               value={date ? dayjs(date, "DD-MM-YYYY") : null}
               maxDate={dayjs()}
+              //when user selects different date from the default (in this case current date) date
               onChange={(value) => {
                 setDate(value ? value.format("DD-MM-YYYY") : "");
               }}

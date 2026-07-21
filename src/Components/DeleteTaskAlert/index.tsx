@@ -20,7 +20,7 @@ function DeleteTaskAlert({ open, onClose, onConfirm }: DeleteTaskProps) {
         <DialogTitle>Delete Task</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this task?{" "}
+            Are you sure you want to delete this task?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
