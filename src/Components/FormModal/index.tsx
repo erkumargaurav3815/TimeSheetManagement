@@ -77,6 +77,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
     // console.log(hours, minutes);
     return `${hours}h ${minutes}m`;
   }
+
   const [startTime, setStartTime] = useState(getCurrentTime());
   const [endTime, setEndTime] = useState(getNextHourTime());
 
@@ -315,7 +316,9 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
                 setDate(value ? value.format("DD-MM-YYYY") : "");
               }}
               slotProps={{
+                //user can't write date manually (user can only select date) bcz of readOnly
                 textField: {
+                  readOnly: true,
                   error: !!errors.date,
                   helperText: errors.date,
                 },
