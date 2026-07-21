@@ -12,8 +12,6 @@ import {
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 // import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import type { Task } from "../types";
@@ -28,8 +26,6 @@ interface Props {
 function TaskTable({
   tasks,
   // completeTask,
-  handleEdit,
-  deleteTask,
   handleView,
 }: Props) {
   return (
@@ -116,14 +112,6 @@ function TaskTable({
                     disabled={task.status === "Completed"}>
                     <CheckCircleIcon />
                   </IconButton> */}
-
-                  <IconButton color="primary" onClick={() => handleEdit(task)}>
-                    <EditIcon />
-                  </IconButton>
-
-                  <IconButton color="error" onClick={() => deleteTask(task.id)}>
-                    <DeleteIcon />
-                  </IconButton>
 
                   <IconButton color="info" onClick={() => handleView(task)}>
                     <VisibilityIcon />

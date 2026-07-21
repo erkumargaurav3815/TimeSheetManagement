@@ -9,10 +9,12 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import type { Task } from "../types";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 
 interface Props {
   addTask: (task: Task) => void;
@@ -88,7 +90,8 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
   useEffect(() => {
     if (editTask) {
       setOpen(true);
-      setProject(editTask.category);
+      const category = editTask.category.toLowerCase();
+      setProject(category);
       if (editTask.category === "assignment") {
         setProjectName(editTask.name);
       } else {
@@ -138,8 +141,6 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
       newErrors.description = "Description is required";
     } else if (description.trim().length < 20) {
       newErrors.description = "Minimum 20 characters required";
-    } else if (!isAlphabetOnly(description)) {
-      newErrors.description = "Only alphabets are allowed";
     }
 
     if (!date) {
@@ -297,9 +298,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
             label="Description"
             value={description}
             onChange={(e) => {
-              if (/^[A-Za-z\s]*$/.test(e.target.value)) {
-                setDescription(e.target.value);
-              }
+              setDescription(e.target.value);
             }}
             error={!!errors.description}
             helperText={errors.description}

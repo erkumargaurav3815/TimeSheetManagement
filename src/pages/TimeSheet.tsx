@@ -10,11 +10,19 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  IconButton,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SearchBar from "../Components/TimeSheetSearchBar";
 import DeleteTaskAlert from "../Components/DeleteTaskAlert";
 import { filterTasks } from "../Components/TimeSheetSearchBar/filterTasks";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+// interface Props {
+//   accordionEdit: (task: Task) => void;
+//   accordionDelete: (id: number) => void;
+// }
 
 function TimeSheet() {
   const [editTask, setEditTask] = useState<Task | null>(null);
@@ -61,6 +69,10 @@ function TimeSheet() {
     setTasks((prev) =>
       prev.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
     );
+    //update view task whenever the task is updated
+    setViewTask((prev) =>
+      prev.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
+    );
     setEditTask(null);
   };
 
@@ -87,6 +99,7 @@ function TimeSheet() {
   const handleDeleteConfirm = () => {
     if (selectedTaskId !== null) {
       setTasks((prev) => prev.filter((task) => task.id !== selectedTaskId));
+      setViewTask((prev) => prev.filter((task) => task.id !== selectedTaskId));
     }
     setOpenDelete(false);
     setSelectedTaskId(null);
@@ -176,25 +189,25 @@ function TimeSheet() {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-
               width: {
-                xs: "90%",
-                sm: 500,
+                xs: "95%",
+                sm: "85%",
+                md: 700,
               },
-
-              bgcolor: "white",
+              maxWidth: 800,
+              bgcolor: "background.paper",
               borderRadius: 3,
               p: 3,
               boxShadow: 24,
-
               maxHeight: "90vh",
               overflowY: "auto",
             }}>
             <Typography
               variant="h5"
               sx={{
-                fontWeight: 800,
+                fontWeight: "bold",
                 mb: 3,
+                textAlign: "center",
               }}>
               Tasks on {viewTask[0].date}
             </Typography>
@@ -203,29 +216,68 @@ function TimeSheet() {
               <Accordion
                 key={task.id}
                 sx={{
-                  mb: 1,
+                  mb: 2,
                   borderRadius: 2,
+                  boxShadow: 2,
+                  "&:before": {
+                    display: "none",
+                  },
                 }}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography sx={{ fontWeight: 700 }}>{task.name}</Typography>
+                  <Typography
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: "1rem",
+                      whiteSpace: "normal",
+                      wordBreak: "break-word",
+                      overflowWrap: "anywhere",
+                      pr: 2,
+                    }}>
+                    {task.name}
+                  </Typography>
                 </AccordionSummary>
 
                 <AccordionDetails>
-                  <Typography>
-                    <b>Category:</b> {task.category}
-                  </Typography>
+                  <Box display="flex" flexDirection="column" gap={2}>
+                    <Typography>
+                      <strong>Category:</strong> {task.category}
+                    </Typography>
 
-                  <Typography>
-                    <b>Description:</b> {task.description}
-                  </Typography>
+                    <Typography
+                      sx={{
+                        whiteSpace: "pre-wrap",
+                        wordBreak: "break-word",
+                        overflowWrap: "anywhere",
+                      }}>
+                      <strong>Description:</strong>
+                      <br />
+                      {task.description}
+                    </Typography>
 
-                  <Typography>
-                    <b>Time Taken:</b> {task.timeTaken}
-                  </Typography>
+                    <Typography>
+                      <strong>Time Taken:</strong> {task.timeTaken}
+                    </Typography>
 
-                  {/* <Typography>
-                    <b>Status:</b> {task.status}
-                  </Typography> */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: 1,
+                        mt: 1,
+                      }}>
+                      <IconButton
+                        color="primary"
+                        onClick={() => handleEdit(task)}>
+                        <EditIcon />
+                      </IconButton>
+
+                      <IconButton
+                        color="error"
+                        onClick={() => deleteTask(task.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
+                  </Box>
                 </AccordionDetails>
               </Accordion>
             ))}
@@ -234,7 +286,7 @@ function TimeSheet() {
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
-                mt: 2,
+                mt: 3,
               }}>
               <Button variant="contained" onClick={closeView}>
                 Close
