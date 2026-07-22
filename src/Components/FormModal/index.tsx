@@ -15,7 +15,6 @@ import type { Task } from "../types";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
-
 import { useTaskForm } from "../hooks/useTaskForm";
 import { useTime } from "../hooks/useTime";
 import { useValidation } from "../hooks/useValidation";
@@ -59,6 +58,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
 
   useEffect(() => {
     if (editTask) {
+      //open modal
       setOpen(true);
       const category = editTask.category.toLowerCase();
       setProject(category);
@@ -82,7 +82,7 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
     setStartTime,
     setEndTime,
   ]);
-
+  //if user edits the category
   const handleChange = (event: SelectChangeEvent) => {
     setProject(event.target.value);
   };
@@ -241,7 +241,6 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
               label="Date"
               value={date ? dayjs(date, "DD-MM-YYYY") : null}
               maxDate={dayjs()}
-              //when user selects different date from the default (in this case current date) date
               onChange={(value) => {
                 setDate(value ? value.format("DD-MM-YYYY") : "");
               }}

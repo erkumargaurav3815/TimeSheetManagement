@@ -8,8 +8,11 @@ export const useTaskForm = () => {
   const [date, setDate] = useState("");
 
   const resetForm = () => {
+    //category
     setProject("");
+    //project name (in case of assignment)
     setProjectName("");
+    //topic name (in case of learning)
     setTopic("");
     setDescription("");
     setDate("");

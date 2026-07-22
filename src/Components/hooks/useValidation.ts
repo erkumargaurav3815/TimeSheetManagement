@@ -9,10 +9,6 @@ export const useValidation = () => {
     time: "",
   });
 
-  const isAlphabetOnly = (value: string) => {
-    return /^[A-Za-z\s]+$/.test(value);
-  };
-
   //form modal validation
   const validate = (
     project: string,
@@ -42,8 +38,6 @@ export const useValidation = () => {
       newErrors.taskName = "Topic/Project name is required";
     } else if (taskName.trim().length < 5) {
       newErrors.taskName = "Minimum 5 characters required";
-    } else if (!isAlphabetOnly(taskName)) {
-      newErrors.taskName = "Only alphabets are allowed";
     }
 
     if (!description.trim()) {

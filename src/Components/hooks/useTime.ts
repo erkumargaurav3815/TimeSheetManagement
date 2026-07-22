@@ -6,11 +6,9 @@ export function useTime() {
     const currentDate = new Date();
     const currentHour = currentDate.getHours();
     const currentMinute = currentDate.getMinutes();
-
-    // Add 0 before single digit values
+    // Add 0 before single digit values so that hours and minutes should both have 2 digits
     const hour = String(currentHour).padStart(2, "0");
     const minute = String(currentMinute).padStart(2, "0");
-
     return `${hour}:${minute}`;
   }
 
@@ -18,10 +16,8 @@ export function useTime() {
   function getNextHourTime() {
     const currentDate = new Date();
     currentDate.setHours(currentDate.getHours() + 1);
-
     const hour = String(currentDate.getHours()).padStart(2, "0");
     const minute = String(currentDate.getMinutes()).padStart(2, "0");
-
     return `${hour}:${minute}`;
   }
 
@@ -30,11 +26,9 @@ export function useTime() {
     // Split time into hours and minutes
     const [startHour, startMinute] = startTime.split(":").map(Number);
     const [endHour, endMinute] = endTime.split(":").map(Number);
-
     // Convert everything into minutes
     const startTotalMinutes = startHour * 60 + startMinute;
     let endTotalMinutes = endHour * 60 + endMinute;
-
     // If end time is smaller, it means it took more than 24 hours
     if (endTotalMinutes < startTotalMinutes) {
       endTotalMinutes += 24 * 60;
@@ -42,11 +36,9 @@ export function useTime() {
 
     // Find difference
     const totalMinutes = endTotalMinutes - startTotalMinutes;
-
     // Convert minutes into hours and minutes
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
-
     return `${hours}h ${minutes}m`;
   }
 

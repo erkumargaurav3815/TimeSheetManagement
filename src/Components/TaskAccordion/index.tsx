@@ -15,6 +15,7 @@ interface Props {
 function TaskAccordion({ tasks }: Props) {
   return (
     <>
+      //convert tasks into key-value pair (date, tasks)
       {Object.entries(tasks).map(([date, dateTasks]) => (
         <Accordion
           key={date}
