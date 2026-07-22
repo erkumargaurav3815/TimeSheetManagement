@@ -163,18 +163,17 @@ function TimeSheet() {
         updateTask={updateTask}
       />
 
-      {tasks.length === 0 ? (
+      {filteredTasks.length === 0 ? (
         <Typography
           sx={{
             display: "flex",
             justifyContent: "center",
           }}>
-          No Tasks Available
+          {search ? "No matching tasks found" : "No Tasks Available"}
         </Typography>
       ) : (
         <TaskTable
           tasks={tableTasks}
-          // completeTask={completeTask}
           handleEdit={handleEdit}
           deleteTask={deleteTask}
           handleView={handleView}

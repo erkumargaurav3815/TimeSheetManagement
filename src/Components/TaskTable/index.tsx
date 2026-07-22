@@ -66,9 +66,7 @@ function TaskTable({
               <TableCell sx={{ fontWeight: "bold" }}>{index + 1}</TableCell>
 
               <TableCell sx={{ whiteSpace: "nowrap" }}>{task.date}</TableCell>
-              <TableCell>
-                {task.category === "assignment" ? "Assignment" : "Learning"}
-              </TableCell>
+              <TableCell>{task.category}</TableCell>
               <TableCell
                 sx={{
                   maxWidth: 100,
