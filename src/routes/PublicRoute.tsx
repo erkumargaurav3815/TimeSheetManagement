@@ -5,7 +5,7 @@ interface PublicRouteProps {
 }
 
 function PublicRoute({ children }: PublicRouteProps) {
-  const userExists = !!localStorage.getItem("user");
+  const userExists = localStorage.getItem("isLoggedIn") === "true";
 
   // If user data exists, don't allow to go to login/signup page
   return userExists ? <Navigate to="/home" replace /> : children;
