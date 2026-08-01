@@ -35,7 +35,7 @@ function ResponsiveAppBar() {
 
   const navigate = useNavigate();
 
-  const isLoggedIn = !!localStorage.getItem("user");
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -46,8 +46,9 @@ function ResponsiveAppBar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/login");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("loggedInUser");
+    navigate("/login", { replace: true });
   };
 
   const mobilePages = isLoggedIn
