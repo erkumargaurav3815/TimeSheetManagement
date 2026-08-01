@@ -1,3 +1,11 @@
+<<<<<<< Updated upstream
+// import React from 'react'
+
+function SignUp() {
+  return <h1>SignUp</h1>;
+}
+
+=======
 import { useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import {
@@ -7,10 +15,10 @@ import {
   Button,
   Typography,
   Box,
-  Link,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import Link from "@mui/material/Link";
+import { Link as RouterLink } from "react-router-dom";
 interface User {
   email: string;
   password: string;
@@ -46,6 +54,13 @@ const SignUp = () => {
       ...prev,
       [name]: value,
     }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+
+    setMessage("");
   };
 
   const validate = () => {
@@ -80,17 +95,33 @@ const SignUp = () => {
 
     if (!validate()) return;
 
-    const user: User = {
+    const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
+
+    const userExists = users.some((user) => user.email === values.email);
+
+    if (userExists) {
+      setMessage("Email already exists");
+      return;
+    }
+
+    users.push({
       email: values.email,
       password: values.password,
-    };
+    });
 
-    localStorage.setItem("user", JSON.stringify(user));
-    setMessage("Sign up sucessfull");
+    localStorage.setItem("users", JSON.stringify(users));
+
+    setMessage("Sign Up Successful");
 
     resetForm();
+
+    setErrors({
+      email: "",
+      password: "",
+    });
+
     setTimeout(() => {
-      navigate("/login");
+      navigate("/login", { replace: true });
     }, 2000);
   };
 
@@ -112,7 +143,15 @@ const SignUp = () => {
         }}>
         <CardContent>
           {message && (
-            <Typography color="success" align="center" sx={{ mb: 2 }}>
+            <Typography
+              align="center"
+              sx={{
+                mb: 2,
+                color:
+                  message === "Sign Up Successful"
+                    ? "success.main"
+                    : "error.main",
+              }}>
               {message}
             </Typography>
           )}
@@ -161,7 +200,10 @@ const SignUp = () => {
 
             <Typography>
               Already have an account?{" "}
-              <Link href="/login" sx={{ textDecoration: "none" }}>
+              <Link
+                component={RouterLink}
+                to="/login"
+                sx={{ textDecoration: "none" }}>
                 Login
               </Link>
             </Typography>
@@ -185,4 +227,5 @@ const SignUp = () => {
   );
 };
 
+>>>>>>> Stashed changes
 export default SignUp;
