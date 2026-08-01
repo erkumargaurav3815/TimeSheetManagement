@@ -1,11 +1,5 @@
-<<<<<<< Updated upstream
 // import React from 'react'
 
-function SignUp() {
-  return <h1>SignUp</h1>;
-}
-
-=======
 import { useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import {
@@ -227,5 +221,4 @@ const SignUp = () => {
   );
 };
 
->>>>>>> Stashed changes
 export default SignUp;
