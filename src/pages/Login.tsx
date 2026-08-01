@@ -9,19 +9,41 @@ import {
   Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+<<<<<<< Updated upstream
+=======
 import Link from "@mui/material/Link";
+import { Link as RouterLink } from "react-router-dom";
+>>>>>>> Stashed changes
+
+interface User {
+  email: string;
+  password: string;
+<<<<<<< Updated upstream
+  name: string;
+=======
+>>>>>>> Stashed changes
+}
 
 const Login = () => {
   const navigate = useNavigate();
+<<<<<<< Updated upstream
 
+  const users: User[] = [
+    {
+      email: "admin@gmail.com",
+      password: "123456",
+      name: "Admin",
+    },
+  ];
+
+=======
+>>>>>>> Stashed changes
   //later on setMessage should update to login message
   const [message, setMessage] = useState("");
-
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
-
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -41,6 +63,12 @@ const Login = () => {
       ...prev,
       [name]: value,
     }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+    setMessage("");
   };
 
   const validate = () => {
@@ -72,24 +100,50 @@ const Login = () => {
 
   const handleLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validate()) return;
 
-    const getCredentials = localStorage.getItem("user");
-    if (!getCredentials) {
-      setMessage("No User Found!");
-      return;
-    }
-    const user = JSON.parse(getCredentials);
-    if (user.email === values.email && user.password === values.password) {
-      setMessage("Login Sucessfull");
+    if (!validate()) return;
+<<<<<<< Updated upstream
+
+    const user = users.find(
+      (item) =>
+        item.email === values.email && item.password === values.password,
+    );
+
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+      setMessage("Login successful");
+
       resetForm();
+
       setTimeout(() => {
         navigate("/home");
+      }, 500);
+    } else {
+      setMessage("Invalid email or password");
+=======
+    const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
+    const existingUser = users.find(
+      (user) =>
+        user.email === values.email && user.password === values.password,
+    );
+    if (existingUser) {
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("loggedInUser", values.email);
+      setMessage("Login Successful");
+      resetForm();
+      setErrors({
+        email: "",
+        password: "",
+      });
+      setTimeout(() => {
+        navigate("/home", { replace: true });
       }, 2000);
     } else {
-      setMessage("Invalid Credentials");
+      setMessage("Invalid Email or Password");
+>>>>>>> Stashed changes
     }
   };
+
   return (
     <Box
       sx={{
@@ -107,12 +161,20 @@ const Login = () => {
           boxShadow: 5,
         }}>
         <CardContent>
-          {" "}
           {message && (
             <Typography
-              color={message === "Login Sucessfull" ? "success" : "error"}
+<<<<<<< Updated upstream
+              color={message === "Login successful" ? "success" : "warning"}
+=======
+>>>>>>> Stashed changes
               align="center"
-              sx={{ mb: 2 }}>
+              sx={{
+                mb: 2,
+                color:
+                  message === "Login Successful"
+                    ? "success.main"
+                    : "error.main",
+              }}>
               {message}
             </Typography>
           )}
@@ -126,6 +188,7 @@ const Login = () => {
             }}>
             Login
           </Typography>
+
           <form onSubmit={handleLogin}>
             <TextField
               fullWidth
@@ -150,12 +213,19 @@ const Login = () => {
               error={!!errors.password}
               helperText={errors.password}
             />
+<<<<<<< Updated upstream
+
+=======
             <Typography>
               Don't have an account?{" "}
-              <Link href="/signup" sx={{ textDecoration: "none" }}>
+              <Link
+                component={RouterLink}
+                to="/signup"
+                sx={{ textDecoration: "none" }}>
                 Sign Up
               </Link>
             </Typography>
+>>>>>>> Stashed changes
             <Button
               fullWidth
               type="submit"
