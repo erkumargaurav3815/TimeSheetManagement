@@ -6,7 +6,7 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const isLoggedIn = !!localStorage.getItem("user");
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   //replace disables the page to go back from protectedRoute (in this case do not go to home in case user is not logged in)
   return isLoggedIn ? children : <Navigate to="/login" replace />;
