@@ -9,25 +9,18 @@ import {
   Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-<<<<<<< Updated upstream
-=======
+
 import Link from "@mui/material/Link";
 import { Link as RouterLink } from "react-router-dom";
->>>>>>> Stashed changes
 
 interface User {
   email: string;
   password: string;
-<<<<<<< Updated upstream
   name: string;
-=======
->>>>>>> Stashed changes
 }
 
 const Login = () => {
   const navigate = useNavigate();
-<<<<<<< Updated upstream
-
   const users: User[] = [
     {
       email: "admin@gmail.com",
@@ -36,8 +29,6 @@ const Login = () => {
     },
   ];
 
-=======
->>>>>>> Stashed changes
   //later on setMessage should update to login message
   const [message, setMessage] = useState("");
   const [values, setValues] = useState({
@@ -102,45 +93,33 @@ const Login = () => {
     e.preventDefault();
 
     if (!validate()) return;
-<<<<<<< Updated upstream
 
-    const user = users.find(
+    const storedUsers: User[] = JSON.parse(
+      localStorage.getItem("users") || "[]",
+    );
+    const allUsers: User[] = [...users, ...storedUsers];
+
+    const user = allUsers.find(
       (item) =>
         item.email === values.email && item.password === values.password,
     );
 
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
-      setMessage("Login successful");
-
-      resetForm();
-
-      setTimeout(() => {
-        navigate("/home");
-      }, 500);
-    } else {
-      setMessage("Invalid email or password");
-=======
-    const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
-    const existingUser = users.find(
-      (user) =>
-        user.email === values.email && user.password === values.password,
-    );
-    if (existingUser) {
       localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("loggedInUser", values.email);
-      setMessage("Login Successful");
+      localStorage.setItem("loggedInUser", user.email);
+      setMessage("Login successful");
       resetForm();
       setErrors({
         email: "",
         password: "",
       });
+
       setTimeout(() => {
         navigate("/home", { replace: true });
-      }, 2000);
+      }, 500);
     } else {
-      setMessage("Invalid Email or Password");
->>>>>>> Stashed changes
+      setMessage("Invalid email or password");
     }
   };
 
@@ -163,15 +142,11 @@ const Login = () => {
         <CardContent>
           {message && (
             <Typography
-<<<<<<< Updated upstream
-              color={message === "Login successful" ? "success" : "warning"}
-=======
->>>>>>> Stashed changes
               align="center"
               sx={{
                 mb: 2,
                 color:
-                  message === "Login Successful"
+                  message === "Login successful"
                     ? "success.main"
                     : "error.main",
               }}>
@@ -213,9 +188,7 @@ const Login = () => {
               error={!!errors.password}
               helperText={errors.password}
             />
-<<<<<<< Updated upstream
 
-=======
             <Typography>
               Don't have an account?{" "}
               <Link
@@ -225,7 +198,6 @@ const Login = () => {
                 Sign Up
               </Link>
             </Typography>
->>>>>>> Stashed changes
             <Button
               fullWidth
               type="submit"
