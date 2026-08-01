@@ -19,31 +19,30 @@ import { filterTasks } from "../Components/TimeSheetSearchBar/filterTasks";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-// interface Props {
-//   accordionEdit: (task: Task) => void;
-//   accordionDelete: (id: number) => void;
-// }
-
 function TimeSheet() {
   const [editTask, setEditTask] = useState<Task | null>(null);
   const [viewTask, setViewTask] = useState<Task[]>([]);
   //for Delete Alert using MUI
   const [openDelete, setOpenDelete] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+  //get user from localStorage
+  const loggedInUser = localStorage.getItem("loggedInUser");
   // get tasks from localStorage
   const [tasks, setTasks] = useState<Task[]>(() => {
-    const savedTasks = localStorage.getItem("tasks");
+    if (!loggedInUser) return [];
+    const savedTasks = localStorage.getItem(`tasks-${loggedInUser}`);
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
+
   //search tasks
   const [search, setSearch] = useState("");
-  //search tasks matching with search and store in filteredTasks
   const filteredTasks = filterTasks(tasks, search);
 
-  // save tasks
+  // Save tasks for the logged-in user
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+    if (!loggedInUser) return;
+    localStorage.setItem(`tasks-${loggedInUser}`, JSON.stringify(tasks));
+  }, [tasks, loggedInUser]);
 
   // add task
   const addTask = (task: Task) => {
@@ -55,15 +54,6 @@ function TimeSheet() {
       },
     ]);
   };
-
-  // mark task completed
-  // const completeTask = (id: number) => {
-  //   setTasks((prev) =>
-  //     prev.map((task) =>
-  //       task.id === id ? { ...task, status: "Completed" } : task,
-  //     ),
-  //   );
-  // };
 
   // update task
   const updateTask = (updatedTask: Task) => {
@@ -84,16 +74,6 @@ function TimeSheet() {
 
   // delete
   const deleteTask = (id: number) => {
-    // alert("Are you sure?");
-    // const deleteConsent = confirm("Are you sure");
-    // if (deleteConsent) {
-    // console.log("confirmed");
-    // setTasks((prev) => prev.filter((task) => task.id !== id));
-    // } else {
-    // console.log("rejected");
-    // }
-    // console.log("Consent");
-    // setTasks((prev) => prev.filter((task) => task.id !== id));
     setSelectedTaskId(id);
     setOpenDelete(true);
   };

@@ -12,12 +12,14 @@ function SearchBar({ value, onChange }: Props) {
     <>
       <Box
         component="form"
-        sx={{ "& > :not(style)": { m: 1, width: "25ch" } }}
+        sx={{ "& > :not(style)": { m: 1, width: "35ch" } }}
         noValidate
         autoComplete="off">
         <TextField
           label="Search Tasks"
           variant="outlined"
+          fullWidth
+          placeholder="Search with task category or name"
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
