@@ -138,7 +138,19 @@ function FormModal({ addTask, editTask, updateTask }: Props) {
           justifyContent: "center",
           mb: 3,
         }}>
-        <Button variant="contained" onClick={() => setOpen(true)}>
+        <Button
+          sx={{
+            height: 50,
+            mt: 3,
+            background: "linear-gradient(135deg,#2017bd,#52648c)",
+            color: "#fff",
+            // padding: "10px 20px",
+            fontWeight: 600,
+            "&:hover": {
+              background: "#3a32c8",
+            },
+          }}
+          onClick={() => setOpen(true)}>
           Add Task
         </Button>
       </Box>

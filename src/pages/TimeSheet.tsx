@@ -132,17 +132,19 @@ function TimeSheet() {
         Time Sheet Management
       </Typography>
 
-      {/* Search bar starts */}
-      <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>
-        <SearchBar value={search} onChange={setSearch} />
-      </Box>
-      {/* Search bar ends */}
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        {/* Search bar starts */}
+        <Box sx={{ display: "flex", justifyContent: "center", m: 2 }}>
+          <SearchBar value={search} onChange={setSearch} />
+        </Box>
+        {/* Search bar ends */}
 
-      <FormModal
-        addTask={addTask}
-        editTask={editTask}
-        updateTask={updateTask}
-      />
+        <FormModal
+          addTask={addTask}
+          editTask={editTask}
+          updateTask={updateTask}
+        />
+      </Box>
 
       {filteredTasks.length === 0 ? (
         <Typography
